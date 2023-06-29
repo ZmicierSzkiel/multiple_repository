@@ -7,6 +7,7 @@ import 'package:multiple_repository/domain/entities/repository_entity.dart';
 
 import 'package:multiple_repository/presentation/repository_list/bloc/repository_list_bloc.dart';
 import 'package:multiple_repository/presentation/repository_list/widgets/repository_list_dropdown_button.dart';
+import 'package:multiple_repository/presentation/repository_list/widgets/repository_list_reset_button.dart';
 import 'package:multiple_repository/presentation/repository_list/widgets/repository_list_tile.dart';
 
 class RepositoryListForm extends StatelessWidget {
@@ -47,34 +48,8 @@ class RepositoryListForm extends StatelessWidget {
                       selectedOption: selectedOption,
                       sortOptions: sortOptions,
                     ),
-                    TextButton(
-                      style: ButtonStyle(
-                        padding: const MaterialStatePropertyAll(
-                          EdgeInsets.symmetric(horizontal: 10.0),
-                        ),
-                        overlayColor: MaterialStatePropertyAll(
-                          AppColors.backgroundColor.withOpacity(0.1),
-                        ),
-                      ),
-                      onPressed: () async {
-                        BlocProvider.of<RepositoryListBloc>(context)
-                            .add(ResetSortRepositoriesEvent());
-                      },
-                      child: const Row(
-                        children: [
-                          Text(
-                            'Reset',
-                            style: TextStyle(
-                              color: AppColors.backgroundColor,
-                            ),
-                          ),
-                          Icon(
-                            Icons.close,
-                            color: AppColors.backgroundColor,
-                          ),
-                        ],
-                      ),
-                    ),
+                    if (selectedOption.isNotEmpty)
+                      const RepositoryListResetButton(),
                   ],
                 ),
                 ListView.builder(

@@ -25,7 +25,11 @@ class RepositoryListBloc
   })  : _getAllRepositoriesUsecase = getAllRepositoriesUsecase,
         _sortRepositoriesUsecase = sortRepositoriesUsecase,
         super(
-          RepositoryListState(repositories: [], selectedOption: ''),
+          RepositoryListState(
+              repositories: [],
+              selectedOption: '',
+              status: LoadingStatus.loading,
+              message: ''),
         ) {
     on<GetAllRepositoriesEvent>(_handleGetAllRepositoriesEvent);
     on<RefreshRepositoriesEvent>(_handleRefreshRepositoriesEvent);
@@ -37,26 +41,49 @@ class RepositoryListBloc
     GetAllRepositoriesEvent event,
     Emitter<RepositoryListState> emit,
   ) async {
-    final repositories = await _getAllRepositoriesUsecase.execute(NoParams());
     emit(
-      state.copyWith(
-        repositories: repositories,
-      ),
+      state.copyWith(status: LoadingStatus.loading),
     );
+    try {
+      final repositories = await _getAllRepositoriesUsecase.execute(NoParams());
+      emit(
+        state.copyWith(
+            repositories: repositories, status: LoadingStatus.success),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: LoadingStatus.failure,
+          message: e.toString(),
+        ),
+      );
+    }
   }
 
   Future<void> _handleRefreshRepositoriesEvent(
     RefreshRepositoriesEvent event,
     Emitter<RepositoryListState> emit,
   ) async {
-    final repositories = await _getAllRepositoriesUsecase.execute(NoParams());
-
     emit(
-      state.copyWith(
-        repositories: repositories,
-        selectedOption: '',
-      ),
+      state.copyWith(status: LoadingStatus.loading),
     );
+    try {
+      final repositories = await _getAllRepositoriesUsecase.execute(NoParams());
+      emit(
+        state.copyWith(
+          repositories: repositories,
+          selectedOption: '',
+          status: LoadingStatus.success,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: LoadingStatus.failure,
+          message: e.toString(),
+        ),
+      );
+    }
   }
 
   List<String> getSortOptions() {
@@ -67,27 +94,52 @@ class RepositoryListBloc
     SortRepositoriesEvent event,
     Emitter<RepositoryListState> emit,
   ) async {
-    final List<RepositoryEntity> sortedRepositories =
-        await _sortRepositoriesUsecase.execute(event.selectedOption);
     emit(
-      state.copyWith(
-        selectedOption: event.selectedOption,
-        repositories: sortedRepositories,
-      ),
+      state.copyWith(status: LoadingStatus.loading),
     );
+    try {
+      final List<RepositoryEntity> sortedRepositories =
+          await _sortRepositoriesUsecase.execute(event.selectedOption);
+      emit(
+        state.copyWith(
+          selectedOption: event.selectedOption,
+          repositories: sortedRepositories,
+          status: LoadingStatus.success,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: LoadingStatus.failure,
+          message: e.toString(),
+        ),
+      );
+    }
   }
 
   Future<void> _handleResetSortRepositoriesEvent(
     ResetSortRepositoriesEvent event,
     Emitter<RepositoryListState> emit,
   ) async {
-    final repositories = await _getAllRepositoriesUsecase.execute(NoParams());
-
     emit(
-      state.copyWith(
-        selectedOption: '',
-        repositories: repositories,
-      ),
+      state.copyWith(status: LoadingStatus.loading),
     );
+    try {
+      final repositories = await _getAllRepositoriesUsecase.execute(NoParams());
+
+      emit(
+        state.copyWith(
+          selectedOption: '',
+          repositories: repositories,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: LoadingStatus.failure,
+          message: e.toString(),
+        ),
+      );
+    }
   }
 }
