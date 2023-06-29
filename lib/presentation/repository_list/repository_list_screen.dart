@@ -37,6 +37,7 @@ class RepositoryListScreen extends StatelessWidget {
             repositories: state.repositories,
             selectedOption: state.selectedOption,
             sortOptions: sortOptions,
+            status: state.status,
           );
         },
       ),

@@ -131,6 +131,7 @@ class RepositoryListBloc
         state.copyWith(
           selectedOption: '',
           repositories: repositories,
+          status: LoadingStatus.success,
         ),
       );
     } catch (e) {
