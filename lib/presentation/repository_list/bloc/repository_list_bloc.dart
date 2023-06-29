@@ -17,12 +17,27 @@ class RepositoryListBloc
           repositories: [],
         )) {
     on<GetAllRepositoriesEvent>(_handleGetAllRepositoriesEvent);
+    on<RefreshRepositoriesEvent>(_handleRefreshRepositoriesEvent);
   }
+
   Future<void> _handleGetAllRepositoriesEvent(
     GetAllRepositoriesEvent event,
     Emitter<RepositoryListState> emit,
   ) async {
     final repositories = await _getAllRepositoriesUsecase.execute(NoParams());
+    emit(
+      state.copyWith(
+        repositories: repositories,
+      ),
+    );
+  }
+
+  Future<void> _handleRefreshRepositoriesEvent(
+    RefreshRepositoriesEvent event,
+    Emitter<RepositoryListState> emit,
+  ) async {
+    final repositories = await _getAllRepositoriesUsecase.execute(NoParams());
+
     emit(
       state.copyWith(
         repositories: repositories,
