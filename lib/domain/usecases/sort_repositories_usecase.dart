@@ -2,16 +2,16 @@ import 'package:multiple_repository/core/use_case.dart';
 import 'package:multiple_repository/domain/entities/repository_entity.dart';
 import 'package:multiple_repository/domain/repositories/db_repository.dart';
 
-class GetAllRepositoriesUsecase
-    implements UseCase<List<RepositoryEntity>, NoParams> {
+class SortRepositoriesUsecase
+    implements UseCase<List<RepositoryEntity>, String> {
   final DbRepository repository;
 
-  GetAllRepositoriesUsecase({
+  SortRepositoriesUsecase({
     required this.repository,
   });
 
   @override
-  Future<List<RepositoryEntity>> execute(NoParams params) async {
-    return await repository.getAllRepositories();
+  Future<List<RepositoryEntity>> execute(String selectedOption) async {
+    return await repository.sortRepositories(selectedOption);
   }
 }

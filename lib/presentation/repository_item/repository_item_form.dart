@@ -35,6 +35,7 @@ class RepositoryItemForm extends StatelessWidget {
                     child: Image.network(repository.owner.avatar),
                   ),
                   Text(repository.description),
+                  Text(repository.owner.login),
                 ],
               ),
             ),

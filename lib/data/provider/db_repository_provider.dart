@@ -40,4 +40,31 @@ class DbRepositoryProvider {
       throw Exception();
     }
   }
+
+  Future<List<RepositoryMapper>> sortRepositoriesFromDbs(
+    String selectedOption,
+  ) async {
+    final List<RepositoryMapper> repositories =
+        await getAllRepositoriesfromDbs();
+
+    switch (selectedOption) {
+      case 'Github first':
+        repositories.sort(
+          (a, b) => b.source.trim().compareTo(a.source.trim()),
+        );
+      case 'BitBucket first':
+        repositories.sort(
+          (a, b) => a.source.trim().compareTo(b.source.trim()),
+        );
+      case 'A-Z':
+        repositories.sort(
+          (a, b) => a.title.trim().compareTo(b.title.trim()),
+        );
+      case 'Z-A':
+        repositories.sort(
+          (a, b) => b.title.trim().compareTo(a.title.trim()),
+        );
+    }
+    return repositories;
+  }
 }

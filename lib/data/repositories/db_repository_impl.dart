@@ -14,4 +14,11 @@ class DbRepositoryImpl extends DbRepository {
   Future<List<RepositoryEntity>> getAllRepositories() async {
     return await _dbRepositoryProvider.getAllRepositoriesfromDbs();
   }
+
+  @override
+  Future<List<RepositoryEntity>> sortRepositories(
+    String selectedOption,
+  ) async {
+    return await _dbRepositoryProvider.sortRepositoriesFromDbs(selectedOption);
+  }
 }
