@@ -1,4 +1,6 @@
 import 'package:multiple_repository/data/provider/db_repository_provider.dart';
+
+import 'package:multiple_repository/domain/entities/repository_entity.dart';
 import 'package:multiple_repository/domain/repositories/db_repository.dart';
 
 class DbRepositoryImpl extends DbRepository {
@@ -9,14 +11,7 @@ class DbRepositoryImpl extends DbRepository {
   }) : _dbRepositoryProvider = dbRepositoryProvider;
 
   @override
-  Future<void> getBitBucketData() {
-    // TODO: implement getBitBucketData
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> getGithubData() {
-    // TODO: implement getGithubData
-    throw UnimplementedError();
+  Future<List<RepositoryEntity>> getAllRepositories() async {
+    return await _dbRepositoryProvider.getAllRepositoriesfromDbs();
   }
 }
