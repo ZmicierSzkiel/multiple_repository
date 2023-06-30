@@ -26,6 +26,7 @@ class RepositoryListForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late ScrollController scrollController = ScrollController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
@@ -41,6 +42,7 @@ class RepositoryListForm extends StatelessWidget {
             )
           : status == LoadingStatus.failure
               ? AlertDialog(
+                  shadowColor: Colors.grey.withOpacity(0.6),
                   title: const Text('Oops!'),
                   content: const Text(
                       'Something went wrong with the connection, please try again'),
@@ -49,7 +51,6 @@ class RepositoryListForm extends StatelessWidget {
                       onPressed: () {
                         BlocProvider.of<RepositoryListBloc>(context)
                             .add(GetAllRepositoriesEvent());
-                        Navigator.pop(context, 'Try again');
                       },
                       child: const Text(
                         'Try again',
@@ -58,6 +59,7 @@ class RepositoryListForm extends StatelessWidget {
                   ],
                 )
               : RefreshIndicator(
+                  color: AppColors.backgroundColor,
                   onRefresh: () async {
                     BlocProvider.of<RepositoryListBloc>(context)
                         .add(RefreshRepositoriesEvent());
@@ -65,21 +67,27 @@ class RepositoryListForm extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 15.0),
+                        horizontal: 10.0,
+                        vertical: 15.0,
+                      ),
                       child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              RepositoryListDropdownButton(
-                                selectedOption: selectedOption,
-                                sortOptions: sortOptions,
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5.0),
+                                child: RepositoryListDropdownButton(
+                                  selectedOption: selectedOption,
+                                  sortOptions: sortOptions,
+                                ),
                               ),
                               if (selectedOption.isNotEmpty)
                                 const RepositoryListResetButton(),
                             ],
                           ),
                           ListView.builder(
+                            controller: scrollController,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: repositories.length,

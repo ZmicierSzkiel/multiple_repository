@@ -8,22 +8,27 @@ class RepositoryMapper extends RepositoryEntity {
     required String description,
     required OwnerEntity owner,
     required String source,
+    required String repoLink,
   }) : super(
           id: id,
           title: title,
           description: description,
           owner: owner,
           source: source,
+          repoLink: repoLink,
         );
 
-  static RepositoryMapper fromJson(Map<String, dynamic> json,
-      {required String source}) {
+  static RepositoryMapper fromJson(
+    Map<String, dynamic> json, {
+    required String source,
+  }) {
     return RepositoryMapper(
       id: json['id'] ?? 0,
       title: json['name'] ?? '',
       description: json['description'] ?? '',
-      owner: OwnerMapper.fromJson(json['owner']),
       source: source,
+      repoLink: json['html_url'] ?? '',
+      owner: OwnerMapper.fromJson(json['owner']),
     );
   }
 
@@ -33,6 +38,7 @@ class RepositoryMapper extends RepositoryEntity {
         'description': description,
         'owner': owner,
         'source': source,
+        'repoLink': repoLink,
       };
 }
 
@@ -41,10 +47,12 @@ class OwnerMapper extends OwnerEntity {
     required int id,
     required String login,
     required String avatar,
+    required String ownerRepoLink,
   }) : super(
           id: id,
           avatar: avatar,
           login: login,
+          ownerRepoLink: ownerRepoLink,
         );
 
   static OwnerMapper fromJson(Map<String, dynamic> json) {
@@ -52,6 +60,8 @@ class OwnerMapper extends OwnerEntity {
       id: json['id'] ?? 0,
       login: json['login'] ?? json['display_name'],
       avatar: json['avatar_url'] ?? _parseNestedAvatarFromBitBucket(json),
+      ownerRepoLink:
+          json['html_url'] ?? _parseNestedRepoLinkFromBitBucket(json),
     );
   }
 
@@ -59,5 +69,11 @@ class OwnerMapper extends OwnerEntity {
     final Map<String, dynamic> links = json['links'];
     final Map<String, dynamic> avatar = links['avatar'];
     return avatar['href'] ?? '';
+  }
+
+  static String _parseNestedRepoLinkFromBitBucket(Map<String, dynamic> json) {
+    final Map<String, dynamic> links = json['links'];
+    final Map<String, dynamic> html = links['html'];
+    return html['href'] ?? '';
   }
 }

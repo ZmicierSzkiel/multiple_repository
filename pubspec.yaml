@@ -17,6 +17,7 @@ dependencies:
   equatable: ^2.0.5
   http: ^1.1.0
   loading_indicator: ^3.1.1
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

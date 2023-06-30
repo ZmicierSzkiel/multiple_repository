@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:multiple_repository/core_ui/colors.dart';
+import 'package:multiple_repository/core_ui/padding.dart';
 import 'package:multiple_repository/domain/entities/repository_entity.dart';
+import 'package:multiple_repository/presentation/repository_item/widgets/repository_item_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RepositoryItemForm extends StatelessWidget {
   final RepositoryEntity repository;
@@ -14,28 +17,87 @@ class RepositoryItemForm extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
-        title: Text(repository.title),
+        title: const Text('Multiple Repository'),
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 5.0,
-          vertical: 10.0,
-        ),
+        padding: AppPadding.twoSidePaddingS,
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              padding: AppPadding.verticalPadding,
+              child: Center(
+                child: SizedBox(
+                  height: 150.0,
+                  width: 150.0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: Image.network(
+                      repository.owner.avatar,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.person),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: AppPadding.twoSidePaddingL,
+              child: Text(
+                repository.title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 24.0,
+                ),
+              ),
+            ),
+            Padding(
+              padding: AppPadding.twoSidePaddingL,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Created by ${repository.owner.login}',
+                  style: const TextStyle(
+                    fontSize: 24.0,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: AppPadding.twoSidePaddingL,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  repository.description,
+                  style: const TextStyle(fontSize: 16.0),
+                ),
+              ),
+            ),
+            const Spacer(),
+            Padding(
+              padding: AppPadding.twoSidePaddingL,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(
-                    height: 100.0,
-                    width: 100.0,
-                    child: Image.network(repository.owner.avatar),
+                  RepositoryItemButton(
+                    onPressed: () {
+                      launchUrl(
+                        repository.repoLink.isNotEmpty
+                            ? Uri.parse(repository.repoLink)
+                            : Uri.parse(repository.owner.ownerRepoLink),
+                      );
+                    },
+                    buttonTitle: 'Repository',
                   ),
-                  Text(repository.description),
-                  Text(repository.owner.login),
+                  RepositoryItemButton(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse(repository.owner.ownerRepoLink),
+                      );
+                    },
+                    buttonTitle: 'User Profile',
+                  )
                 ],
               ),
             ),

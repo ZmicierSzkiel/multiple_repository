@@ -6,6 +6,7 @@ class RepositoryEntity {
   final String description;
   final OwnerEntity owner;
   final String source;
+  final String repoLink;
 
   RepositoryEntity({
     required this.id,
@@ -13,5 +14,6 @@ class RepositoryEntity {
     required this.description,
     required this.owner,
     required this.source,
+    required this.repoLink,
   });
 }
