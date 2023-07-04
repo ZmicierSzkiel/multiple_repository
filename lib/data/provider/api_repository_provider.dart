@@ -6,11 +6,11 @@ import 'package:multiple_repository/data/models/repository_model.dart';
 
 import 'package:multiple_repository/domain/entities/search_entity.dart';
 
-class DbRepositoryProvider {
+class ApiRepositoryProvider {
   final String authToken =
-      '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';
+      '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';
 
-  Future<List<RepositoryMapper>> getAllRepositoriesfromDbs() async {
+  Future<List<RepositoryMapper>> getAllRepositoriesfromApi() async {
     try {
       List<http.Response> responses = await Future.wait(
         [
@@ -54,11 +54,11 @@ class DbRepositoryProvider {
     }
   }
 
-  Future<List<RepositoryMapper>> sortRepositoriesFromDbs(
+  Future<List<RepositoryMapper>> sortRepositoriesFromApi(
     String selectedOption,
   ) async {
     final List<RepositoryMapper> repositories =
-        await getAllRepositoriesfromDbs();
+        await getAllRepositoriesfromApi();
 
     switch (selectedOption) {
       case 'Github first':
@@ -81,10 +81,10 @@ class DbRepositoryProvider {
     return repositories;
   }
 
-  Future<List<RepositoryMapper>> getSearchResultFromDbs(
+  Future<List<RepositoryMapper>> getSearchResultFromApi(
       SearchEntity params) async {
     final List<RepositoryMapper> repositories =
-        await getAllRepositoriesfromDbs();
+        await getAllRepositoriesfromApi();
 
     return params.searchValue.isEmpty
         ? repositories

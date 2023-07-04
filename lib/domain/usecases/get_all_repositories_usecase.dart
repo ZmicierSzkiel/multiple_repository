@@ -1,10 +1,10 @@
 import 'package:multiple_repository/core/use_case.dart';
 import 'package:multiple_repository/domain/entities/repository_entity.dart';
-import 'package:multiple_repository/domain/repositories/db_repository.dart';
+import 'package:multiple_repository/domain/repositories/api_repository.dart';
 
 class GetAllRepositoriesUsecase
     implements UseCase<List<RepositoryEntity>, NoParams> {
-  final DbRepository repository;
+  final ApiRepository repository;
 
   GetAllRepositoriesUsecase({
     required this.repository,
