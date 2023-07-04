@@ -45,20 +45,20 @@ class RepositoryMapper extends RepositoryEntity {
 class OwnerMapper extends OwnerEntity {
   OwnerMapper({
     required int id,
-    required String login,
+    required String username,
     required String avatar,
     required String ownerRepoLink,
   }) : super(
           id: id,
           avatar: avatar,
-          login: login,
+          username: username,
           ownerRepoLink: ownerRepoLink,
         );
 
   static OwnerMapper fromJson(Map<String, dynamic> json) {
     return OwnerMapper(
       id: json['id'] ?? 0,
-      login: json['login'] ?? json['display_name'],
+      username: json['login'] ?? json['display_name'],
       avatar: json['avatar_url'] ?? _parseNestedAvatarFromBitBucket(json),
       ownerRepoLink:
           json['html_url'] ?? _parseNestedRepoLinkFromBitBucket(json),

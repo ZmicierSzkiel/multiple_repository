@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:multiple_repository/core_ui/colors.dart';
-import 'package:multiple_repository/core_ui/padding.dart';
 
-class RepositoryItemButton extends StatelessWidget {
+class AppButton extends StatelessWidget {
   final void Function()? onPressed;
   final String buttonTitle;
 
-  const RepositoryItemButton({
+  const AppButton({
     super.key,
-    required this.onPressed,
+    this.onPressed,
     required this.buttonTitle,
   });
 

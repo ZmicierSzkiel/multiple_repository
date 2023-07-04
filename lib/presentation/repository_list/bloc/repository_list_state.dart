@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'repository_list_bloc.dart';
 
 enum LoadingStatus {
@@ -9,28 +8,32 @@ enum LoadingStatus {
 
 class RepositoryListState {
   final List<RepositoryEntity> repositories;
-  final String selectedOption;
+  final String selectedSortOption;
   final LoadingStatus status;
   final String message;
+  final String searchValue;
 
   RepositoryListState({
     required this.repositories,
-    required this.selectedOption,
+    required this.selectedSortOption,
     required this.status,
     required this.message,
+    required this.searchValue,
   });
 
   RepositoryListState copyWith({
     List<RepositoryEntity>? repositories,
-    String? selectedOption,
-    final LoadingStatus? status,
-    final String? message,
+    String? selectedSortOption,
+    LoadingStatus? status,
+    String? message,
+    String? searchValue,
   }) {
     return RepositoryListState(
       repositories: repositories ?? this.repositories,
-      selectedOption: selectedOption ?? this.selectedOption,
+      selectedSortOption: selectedSortOption ?? this.selectedSortOption,
       status: status ?? this.status,
       message: message ?? this.message,
+      searchValue: searchValue ?? this.searchValue,
     );
   }
 }

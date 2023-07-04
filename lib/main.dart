@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:multiple_repository/data/di/app_locator_impl.dart';
 
-import 'presentation/repository_list/repository_list_screen.dart';
+import 'package:multiple_repository/presentation/repository_list/repository_list_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized;

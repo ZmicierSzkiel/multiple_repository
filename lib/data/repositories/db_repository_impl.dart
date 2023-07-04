@@ -1,6 +1,7 @@
 import 'package:multiple_repository/data/provider/db_repository_provider.dart';
 
 import 'package:multiple_repository/domain/entities/repository_entity.dart';
+import 'package:multiple_repository/domain/entities/search_entity.dart';
 import 'package:multiple_repository/domain/repositories/db_repository.dart';
 
 class DbRepositoryImpl extends DbRepository {
@@ -20,5 +21,10 @@ class DbRepositoryImpl extends DbRepository {
     String selectedOption,
   ) async {
     return await _dbRepositoryProvider.sortRepositoriesFromDbs(selectedOption);
+  }
+
+  @override
+  Future<List<RepositoryEntity>> getSearchResult(SearchEntity params) async {
+    return await _dbRepositoryProvider.getSearchResultFromDbs(params);
   }
 }

@@ -15,7 +15,6 @@ class RepositoryListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: AppPadding.verticalPadding,
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -56,14 +55,20 @@ class RepositoryListTile extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    repository.source,
-                    style: const TextStyle(fontWeight: FontWeight.w700),
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      repository.owner.username,
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    Text(
+                      repository.source,
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                  ],
                 ),
-              )
+              ),
             ],
           ),
         ),

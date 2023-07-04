@@ -5,6 +5,7 @@ import 'package:multiple_repository/core/app_locator.dart';
 
 import 'package:multiple_repository/domain/repositories/db_repository.dart';
 import 'package:multiple_repository/domain/usecases/get_all_repositories_usecase.dart';
+import 'package:multiple_repository/domain/usecases/get_search_result_usecase.dart';
 import 'package:multiple_repository/domain/usecases/sort_repositories_usecase.dart';
 
 import 'package:multiple_repository/presentation/repository_list/bloc/repository_list_bloc.dart';
@@ -22,9 +23,13 @@ class RepositoryListScreen extends StatelessWidget {
       sortRepositoriesUsecase: SortRepositoriesUsecase(
         repository: getIt.get<DbRepository>(),
       ),
+      getSearchResultUseCase: GetSearchResultUseCase(
+        repository: getIt.get<DbRepository>(),
+      ),
     );
 
     final List<String> sortOptions = repositoryListBloc.getSortOptions();
+    final List<String> searchOptions = repositoryListBloc.getSearchOptions();
 
     return BlocProvider(
       create: (context) => repositoryListBloc
@@ -35,8 +40,9 @@ class RepositoryListScreen extends StatelessWidget {
         builder: (context, state) {
           return RepositoryListForm(
             repositories: state.repositories,
-            selectedOption: state.selectedOption,
+            selectedSortOption: state.selectedSortOption,
             sortOptions: sortOptions,
+            searchOptions: searchOptions,
             status: state.status,
           );
         },

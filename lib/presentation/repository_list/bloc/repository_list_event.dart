@@ -15,3 +15,9 @@ final class SortRepositoriesEvent extends RepositoryListEvent {
 }
 
 final class ResetSortRepositoriesEvent extends RepositoryListEvent {}
+
+final class GetSearchResultEvent extends RepositoryListEvent {
+  final String searchValue;
+
+  GetSearchResultEvent(this.searchValue);
+}

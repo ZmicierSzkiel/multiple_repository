@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:multiple_repository/core_ui/button.dart';
 import 'package:multiple_repository/core_ui/colors.dart';
 import 'package:multiple_repository/core_ui/padding.dart';
+
 import 'package:multiple_repository/domain/entities/repository_entity.dart';
-import 'package:multiple_repository/presentation/repository_item/widgets/repository_item_button.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class RepositoryItemForm extends StatelessWidget {
   final RepositoryEntity repository;
+
   const RepositoryItemForm({
     super.key,
     required this.repository,
@@ -57,7 +60,7 @@ class RepositoryItemForm extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Created by ${repository.owner.login}',
+                  'Created by ${repository.owner.username}',
                   style: const TextStyle(
                     fontSize: 24.0,
                   ),
@@ -80,7 +83,7 @@ class RepositoryItemForm extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  RepositoryItemButton(
+                  AppButton(
                     onPressed: () {
                       launchUrl(
                         repository.repoLink.isNotEmpty
@@ -90,7 +93,7 @@ class RepositoryItemForm extends StatelessWidget {
                     },
                     buttonTitle: 'Repository',
                   ),
-                  RepositoryItemButton(
+                  AppButton(
                     onPressed: () {
                       launchUrl(
                         Uri.parse(repository.owner.ownerRepoLink),

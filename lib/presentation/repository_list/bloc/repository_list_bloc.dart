@@ -1,7 +1,11 @@
 import 'package:bloc/bloc.dart';
+
 import 'package:multiple_repository/core/use_case.dart';
+
 import 'package:multiple_repository/domain/entities/repository_entity.dart';
+import 'package:multiple_repository/domain/entities/search_entity.dart';
 import 'package:multiple_repository/domain/usecases/get_all_repositories_usecase.dart';
+import 'package:multiple_repository/domain/usecases/get_search_result_usecase.dart';
 import 'package:multiple_repository/domain/usecases/sort_repositories_usecase.dart';
 
 part 'repository_list_event.dart';
@@ -11,6 +15,7 @@ class RepositoryListBloc
     extends Bloc<RepositoryListEvent, RepositoryListState> {
   final GetAllRepositoriesUsecase _getAllRepositoriesUsecase;
   final SortRepositoriesUsecase _sortRepositoriesUsecase;
+  final GetSearchResultUseCase _getSearchResultUseCase;
 
   final List<String> sortOptions = [
     'Github first',
@@ -19,22 +24,32 @@ class RepositoryListBloc
     'Z-A',
   ];
 
+  final List<String> searchOptions = [
+    'Github',
+    'BitBucket',
+  ];
+
   RepositoryListBloc({
     required GetAllRepositoriesUsecase getAllRepositoriesUsecase,
     required SortRepositoriesUsecase sortRepositoriesUsecase,
+    required GetSearchResultUseCase getSearchResultUseCase,
   })  : _getAllRepositoriesUsecase = getAllRepositoriesUsecase,
         _sortRepositoriesUsecase = sortRepositoriesUsecase,
+        _getSearchResultUseCase = getSearchResultUseCase,
         super(
           RepositoryListState(
-              repositories: [],
-              selectedOption: '',
-              status: LoadingStatus.loading,
-              message: ''),
+            repositories: [],
+            selectedSortOption: '',
+            status: LoadingStatus.loading,
+            message: '',
+            searchValue: '',
+          ),
         ) {
     on<GetAllRepositoriesEvent>(_handleGetAllRepositoriesEvent);
     on<RefreshRepositoriesEvent>(_handleRefreshRepositoriesEvent);
     on<SortRepositoriesEvent>(_handleSortRepositoriesEvent);
     on<ResetSortRepositoriesEvent>(_handleResetSortRepositoriesEvent);
+    on<GetSearchResultEvent>(_handleGetSearchResultEvent);
   }
 
   Future<void> _handleGetAllRepositoriesEvent(
@@ -72,7 +87,7 @@ class RepositoryListBloc
       emit(
         state.copyWith(
           repositories: repositories,
-          selectedOption: '',
+          selectedSortOption: '',
           status: LoadingStatus.success,
         ),
       );
@@ -90,6 +105,10 @@ class RepositoryListBloc
     return sortOptions;
   }
 
+  List<String> getSearchOptions() {
+    return searchOptions;
+  }
+
   Future<void> _handleSortRepositoriesEvent(
     SortRepositoriesEvent event,
     Emitter<RepositoryListState> emit,
@@ -102,7 +121,7 @@ class RepositoryListBloc
           await _sortRepositoriesUsecase.execute(event.selectedOption);
       emit(
         state.copyWith(
-          selectedOption: event.selectedOption,
+          selectedSortOption: event.selectedOption,
           repositories: sortedRepositories,
           status: LoadingStatus.success,
         ),
@@ -129,8 +148,35 @@ class RepositoryListBloc
 
       emit(
         state.copyWith(
-          selectedOption: '',
+          selectedSortOption: '',
           repositories: repositories,
+          status: LoadingStatus.success,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: LoadingStatus.failure,
+          message: e.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleGetSearchResultEvent(
+    GetSearchResultEvent event,
+    Emitter<RepositoryListState> emit,
+  ) async {
+    try {
+      final List<RepositoryEntity> searchResult =
+          await _getSearchResultUseCase.execute(
+        SearchEntity(
+          searchValue: event.searchValue,
+        ),
+      );
+      emit(
+        state.copyWith(
+          repositories: searchResult,
           status: LoadingStatus.success,
         ),
       );

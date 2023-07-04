@@ -4,13 +4,13 @@ import 'package:multiple_repository/core_ui/colors.dart';
 import 'package:multiple_repository/core_ui/padding.dart';
 import 'package:multiple_repository/presentation/repository_list/bloc/repository_list_bloc.dart';
 
-class RepositoryListDropdownButton extends StatelessWidget {
-  final String selectedOption;
+class RepositoryListSortByDropdownButton extends StatelessWidget {
+  final String selectedSortOption;
   final List<String> sortOptions;
 
-  const RepositoryListDropdownButton({
+  const RepositoryListSortByDropdownButton({
     super.key,
-    required this.selectedOption,
+    required this.selectedSortOption,
     required this.sortOptions,
   });
 
@@ -22,7 +22,7 @@ class RepositoryListDropdownButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(50.0),
       ),
       child: DropdownButton(
-        value: selectedOption.isNotEmpty ? selectedOption : null,
+        value: selectedSortOption.isNotEmpty ? selectedSortOption : null,
         underline: const SizedBox(),
         alignment: Alignment.center,
         padding: AppPadding.horizontalPadding10,
