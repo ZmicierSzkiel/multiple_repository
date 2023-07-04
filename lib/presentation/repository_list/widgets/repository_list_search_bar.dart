@@ -55,7 +55,7 @@ class _RepositoryListSearchBarState extends State<RepositoryListSearchBar> {
                 controller.clear();
                 FocusScope.of(context).unfocus();
                 BlocProvider.of<RepositoryListBloc>(context).add(
-                  GetSearchResultEvent(''),
+                  ResetSearchResultEvent(),
                 );
               }
             },

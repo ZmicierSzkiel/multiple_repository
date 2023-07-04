@@ -8,7 +8,7 @@ import 'package:multiple_repository/domain/entities/search_entity.dart';
 
 class ApiRepositoryProvider {
   final String authToken =
-      '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';
+      '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';
 
   Future<List<RepositoryMapper>> getAllRepositoriesfromApi() async {
     try {
@@ -17,10 +17,14 @@ class ApiRepositoryProvider {
           http.get(
             Uri.https(
               'api.github.com',
-              '/repositories',
-              {},
+              'repositories',
+              {
+                'per_page': '100',
+              },
             ),
-            headers: {'Authorization': 'Bearer $authToken'},
+            headers: {
+              'Authorization': 'Bearer $authToken',
+            },
           ),
           http.get(
             Uri.https(
@@ -28,6 +32,7 @@ class ApiRepositoryProvider {
               '/2.0/repositories',
               {
                 'fields': 'values.name,values.owner,values.description',
+                'pagelen': '10',
               },
             ),
           ),
@@ -83,30 +88,50 @@ class ApiRepositoryProvider {
 
   Future<List<RepositoryMapper>> getSearchResultFromApi(
       SearchEntity params) async {
-    final List<RepositoryMapper> repositories =
-        await getAllRepositoriesfromApi();
+    final String encodedSearchValue = Uri.encodeComponent(params.searchValue);
 
-    return params.searchValue.isEmpty
-        ? repositories
-        : repositories.where(
-            (repository) {
-              final String lowerCaseSearchValue =
-                  params.searchValue.toLowerCase();
-
-              final String lowerCaseTitle = repository.title.toLowerCase();
-              final String lowerCaseUsername =
-                  repository.owner.username.toLowerCase();
-              final String lowerCaseSource = repository.source.toLowerCase();
-
-              final bool isMatchedTitle =
-                  lowerCaseTitle.contains(lowerCaseSearchValue);
-              final bool isMatchedUsername =
-                  lowerCaseUsername.contains(lowerCaseSearchValue);
-              final bool isMatchedSource =
-                  lowerCaseSource.contains(lowerCaseSearchValue);
-
-              return isMatchedTitle || isMatchedUsername || isMatchedSource;
+    final List<http.Response> responses = await Future.wait(
+      [
+        http.get(
+          Uri.https(
+            'api.github.com',
+            'search/repositories',
+            {
+              'per_page': '20',
+              'q': '$encodedSearchValue in:name',
             },
-          ).toList();
+          ),
+          headers: {
+            'Authorization': 'Bearer $authToken',
+          },
+        ),
+        http.get(
+          Uri.https(
+            'api.bitbucket.org',
+            '/2.0/repositories',
+            {
+              'fields': 'values.name,values.owner,values.description',
+            },
+          ),
+        ),
+      ],
+    );
+    final Map<String, dynamic> githubSearchResult =
+        json.decode(responses[0].body);
+    final List<dynamic> githubSearchResults = githubSearchResult['items'];
+
+    final Map<String, dynamic> bitBucketSearchResult =
+        json.decode(responses[1].body);
+    final List<dynamic> bitBucketSearchResults =
+        bitBucketSearchResult['values'];
+
+    return [
+      ...githubSearchResults.map(
+        (json) => RepositoryMapper.fromJson(json, source: 'GitHub'),
+      ),
+      ...bitBucketSearchResults.map(
+        (json) => RepositoryMapper.fromJson(json, source: 'BitBucket'),
+      ),
+    ];
   }
 }

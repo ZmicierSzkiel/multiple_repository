@@ -24,7 +24,9 @@ class ApiRepositoryImpl extends ApiRepository {
   }
 
   @override
-  Future<List<RepositoryEntity>> getSearchResult(SearchEntity params) async {
+  Future<List<RepositoryEntity>> getSearchResult(
+    SearchEntity params,
+  ) async {
     return await _apiRepositoryProvider.getSearchResultFromApi(params);
   }
 }

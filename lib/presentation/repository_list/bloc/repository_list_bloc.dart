@@ -17,18 +17,6 @@ class RepositoryListBloc
   final SortRepositoriesUsecase _sortRepositoriesUsecase;
   final GetSearchResultUseCase _getSearchResultUseCase;
 
-  final List<String> sortOptions = [
-    'Github first',
-    'BitBucket first',
-    'A-Z',
-    'Z-A',
-  ];
-
-  final List<String> searchOptions = [
-    'Github',
-    'BitBucket',
-  ];
-
   RepositoryListBloc({
     required GetAllRepositoriesUsecase getAllRepositoriesUsecase,
     required SortRepositoriesUsecase sortRepositoriesUsecase,
@@ -50,6 +38,7 @@ class RepositoryListBloc
     on<SortRepositoriesEvent>(_handleSortRepositoriesEvent);
     on<ResetSortRepositoriesEvent>(_handleResetSortRepositoriesEvent);
     on<GetSearchResultEvent>(_handleGetSearchResultEvent);
+    on<ResetSearchResultEvent>(_handleResetSearchResultEvent);
   }
 
   Future<void> _handleGetAllRepositoriesEvent(
@@ -101,13 +90,13 @@ class RepositoryListBloc
     }
   }
 
-  List<String> getSortOptions() {
-    return sortOptions;
-  }
+  // List<String> getSortOptions() {
+  //   return sortOptions;
+  // }
 
-  List<String> getSearchOptions() {
-    return searchOptions;
-  }
+  // List<String> getSearchOptions() {
+  //   return searchOptions;
+  // }
 
   Future<void> _handleSortRepositoriesEvent(
     SortRepositoriesEvent event,
@@ -177,6 +166,34 @@ class RepositoryListBloc
       emit(
         state.copyWith(
           repositories: searchResult,
+          status: LoadingStatus.success,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: LoadingStatus.failure,
+          message: e.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleResetSearchResultEvent(
+    ResetSearchResultEvent event,
+    Emitter<RepositoryListState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: LoadingStatus.loading,
+      ),
+    );
+    try {
+      final repositories = await _getAllRepositoriesUsecase.execute(NoParams());
+      emit(
+        state.copyWith(
+          searchValue: '',
+          repositories: repositories,
           status: LoadingStatus.success,
         ),
       );

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:multiple_repository/core_ui/colors.dart';
 import 'package:multiple_repository/core_ui/padding.dart';
+
 import 'package:multiple_repository/domain/entities/repository_entity.dart';
+
 import 'package:multiple_repository/presentation/repository_item/repository_item_screen.dart';
 
 class RepositoryListTile extends StatelessWidget {

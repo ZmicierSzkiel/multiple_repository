@@ -21,3 +21,5 @@ final class GetSearchResultEvent extends RepositoryListEvent {
 
   GetSearchResultEvent(this.searchValue);
 }
+
+final class ResetSearchResultEvent extends RepositoryListEvent {}

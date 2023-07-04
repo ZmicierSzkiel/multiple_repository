@@ -12,6 +12,12 @@ class RepositoryListState {
   final LoadingStatus status;
   final String message;
   final String searchValue;
+  final List<String> sortOptions = [
+    'Github first',
+    'BitBucket first',
+    'A-Z',
+    'Z-A',
+  ];
 
   RepositoryListState({
     required this.repositories,
